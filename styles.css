@@ -1,11 +1,10 @@
-/* Global Styles */
 :root {
-    --primary-color: #0366d6; /* GitHub-like blue */
-    --secondary-color: #28a745; /* GitHub-like green */
-    --dark-color: #24292e; /* GitHub-like dark */
-    --light-color: #f6f8fa; /* GitHub-like light */
-    --danger-color: #d73a49; /* GitHub-like red */
-    --gray-color: #6a737d; /* GitHub-like gray */
+    --primary-color: #4285f4;
+    --secondary-color: #34a853;
+    --dark-color: #202124;
+    --light-color: #f8f9fa;
+    --danger-color: #ea4335;
+    --gray-color: #5f6368;
 }
 
 * {
@@ -15,10 +14,10 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    background-color: #fafbfc; /* GitHub-like background */
-    color: #24292e; /* GitHub-like text color */
+    background-color: #f5f5f5;
+    color: #333;
 }
 
 .container {
@@ -39,29 +38,25 @@ header {
     padding: 2rem 0;
     text-align: center;
     margin-bottom: 2rem;
-    border-bottom: 1px solid #e1e4e8; /* GitHub-like border */
 }
 
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
-    font-weight: 600;
 }
 
 header p {
     font-size: 1.1rem;
     opacity: 0.9;
-    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Form Styles */
-.paste-creation {
+.paste-creation, .edit-form {
     background: white;
-    border-radius: 6px; /* GitHub-like border radius */
-    box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12); /* GitHub-like shadow */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     margin-bottom: 2rem;
-    border: 1px solid #e1e4e8; /* GitHub-like border */
 }
 
 .form-group {
@@ -72,42 +67,25 @@ header p {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--dark-color);
 }
 
 .form-group textarea {
     width: 100%;
     padding: 1rem;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 0.9rem;
     resize: vertical;
     min-height: 300px;
-    background-color: var(--light-color);
-    color: #24292e;
-}
-
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
 }
 
 .form-group input[type="text"] {
     width: 100%;
     padding: 0.8rem;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     font-size: 1rem;
-    background-color: white;
-}
-
-.form-group input[type="text"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
 }
 
 .form-actions {
@@ -120,13 +98,13 @@ header p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    font-size: 0.9rem;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
@@ -140,7 +118,7 @@ header p {
 }
 
 .btn-primary:hover {
-    background-color: #035fc7;
+    background-color: #3367d6;
 }
 
 .btn-secondary {
@@ -149,17 +127,16 @@ header p {
 }
 
 .btn-secondary:hover {
-    background-color: #5c646d;
+    background-color: #4d5156;
 }
 
 .btn-copy {
     background-color: var(--secondary-color);
     color: white;
-    border-color: rgba(27, 31, 35, 0.15);
 }
 
 .btn-copy:hover {
-    background-color: #269f42;
+    background-color: #2d9246;
 }
 
 .btn-raw {
@@ -168,7 +145,7 @@ header p {
 }
 
 .btn-raw:hover {
-    background-color: #1b1f23;
+    background-color: #1a1c20;
 }
 
 .btn-new {
@@ -176,24 +153,18 @@ header p {
     color: white;
 }
 
-.btn-new:hover {
-    background-color: #035fc7;
-}
-
 /* Result Section */
 .paste-result {
     background: white;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     text-align: center;
-    border: 1px solid #e1e4e8;
 }
 
 .paste-result h2 {
     margin-bottom: 1.5rem;
     color: var(--dark-color);
-    font-size: 1.5rem;
 }
 
 .result-box {
@@ -208,169 +179,89 @@ header p {
 
 .url-display input {
     flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px 0 0 6px;
-    font-size: 0.85rem;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    background-color: var(--light-color);
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 0.9rem;
+    font-family: 'Courier New', Courier, monospace;
     border-right: none;
 }
 
 .url-display button {
-    border-radius: 0 6px 6px 0;
+    border-radius: 0 4px 4px 0;
     white-space: nowrap;
-    padding: 0.5rem 0.8rem;
-}
-
-.expiry-info {
-    margin-bottom: 1.5rem;
-    color: var(--gray-color);
-    font-size: 0.9rem;
 }
 
 .actions {
     display: flex;
     justify-content: center;
     gap: 1rem;
+    margin-top: 1.5rem;
 }
 
-/* Paste View Styles */
+/* View Section */
 .paste-view {
     background: white;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(27, 31, 35, 0.12);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    border: 1px solid #e1e4e8;
 }
 
-.paste-view .actions {
-    justify-content: flex-start;
-    margin-bottom: 1.5rem;
-}
-/* Edit Form Styles */
-.edit-form {
-    margin-top: 2rem;
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 6px;
-    border: 1px solid #e1e4e8;
-}
-
-.edit-form textarea {
-    width: 100%;
-    padding: 1rem;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    font-size: 0.9rem;
-    resize: vertical;
-    min-height: 300px;
-    background-color: white;
-}
-
-.edit-form .form-actions {
-    margin-top: 1rem;
-}
-
-/* Edit Button Styles */
-#editBtn {
-    background-color: #f9826c;
-    color: white;
-}
-
-#editBtn:hover {
-    background-color: #e36209;
-}
-
-/* View Mode */
-.view-mode .edit-form {
-    display: none;
-}
-
-.view-mode #editBtn {
-    display: inline-flex;
-}
-
-.edit-mode .edit-form {
-    display: block;
-}
-
-.edit-mode #pasteDisplay {
-    display: none;
-}
-
-.edit-mode #editBtn {
-    display: none;
-}
-/* Paste Meta Info */
 .paste-meta {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
     color: var(--gray-color);
     font-size: 0.9rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e1e4e8;
 }
 
-/* Pre and Code Styling */
 pre {
-    background: var(--light-color);
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid #e1e4e8;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
     overflow-x: auto;
-    line-height: 1.45;
-    tab-size: 4;
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    font-size: 0.85rem;
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
 }
 
-/* Syntax highlighting (GitHub-like) */
-.keyword { color: #d73a49; } /* red */
-.string { color: #032f62; } /* dark blue */
-.comment { color: #6a737d; } /* gray */
-.number { color: #005cc5; } /* blue */
-.function { color: #6f42c1; } /* purple */
-.parameter { color: #e36209; } /* orange */
-
-/* Raw View Styles */
-body.raw-view {
-    margin: 0;
-    padding: 0;
-    background: white;
+/* Edit Section */
+.edit-form {
+    margin-top: 2rem;
 }
 
-body.raw-view pre {
-    margin: 0;
-    padding: 1rem;
-    border: none;
-    border-radius: 0;
-    background: white;
+#editBtn {
+    background-color: #fbbc05;
+    color: white;
 }
 
-/* Footer Styles */
+#editBtn:hover {
+    background-color: #e8ac04;
+}
+
+/* Footer */
 footer {
     background-color: var(--dark-color);
     color: white;
     text-align: center;
     padding: 1.5rem 0;
     margin-top: 2rem;
-    border-top: 1px solid #e1e4e8;
 }
 
-footer p {
-    margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.7);
+/* Raw View */
+body.raw-view {
+    margin: 0;
+    padding: 0;
 }
 
-.credits {
-    font-size: 0.9rem;
-    opacity: 0.7;
+body.raw-view pre {
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0;
+    border: none;
 }
 
-/* Responsive Styles */
+/* Responsive */
 @media (max-width: 768px) {
     .form-actions, .actions {
         flex-direction: column;
@@ -381,38 +272,13 @@ footer p {
     }
     
     .url-display input {
-        border-radius: 6px;
-        border-right: 1px solid #e1e4e8;
+        border-radius: 4px;
+        border-right: 1px solid #ddd;
         margin-bottom: 0.5rem;
     }
     
     .url-display button {
-        border-radius: 6px;
+        border-radius: 4px;
         width: 100%;
     }
-    
-    .paste-meta {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-}
-
-/* GitHub-like markdown styling for better text display */
-.markdown-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-}
-
-.markdown-body pre {
-    background-color: var(--light-color);
-    border-radius: 6px;
-    padding: 16px;
-}
-
-.markdown-body code {
-    background-color: rgba(27, 31, 35, 0.05);
-    border-radius: 3px;
-    font-size: 85%;
-    margin: 0;
-    padding: 0.2em 0.4em;
 }
