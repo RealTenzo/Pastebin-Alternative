@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EditablePaste - GitHub-like Pastebin</title>
+    <title>SharePaste - Editable Pastebin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-paste"></i> EditablePaste</h1>
-            <p>A GitHub-like pastebin with editing functionality</p>
+            <h1><i class="fas fa-paste"></i> SharePaste</h1>
+            <p>Create and share pastes with editable raw links</p>
         </div>
     </header>
 
@@ -54,9 +54,6 @@
                         <i class="fas fa-copy"></i> Copy
                     </button>
                 </div>
-                <div class="expiry-info">
-                    <p>This paste will be stored permanently in your browser.</p>
-                </div>
                 <div class="actions">
                     <a href="#" id="viewPaste" class="btn">
                         <i class="fas fa-eye"></i> View Paste
@@ -87,7 +84,7 @@
             </div>
             <pre id="pasteDisplay"></pre>
             
-            <!-- Edit Form (hidden by default) -->
+            <!-- Edit Form -->
             <div class="edit-form hidden" id="editForm">
                 <form id="updateForm">
                     <div class="form-group">
@@ -113,8 +110,7 @@
 
     <footer>
         <div class="container">
-            <p>EditablePaste - A GitHub-like pastebin</p>
-            <p class="credits">Pastes are stored in your browser and can be edited</p>
+            <p>SharePaste - Editable pastebin with shareable raw links</p>
         </div>
     </footer>
 
