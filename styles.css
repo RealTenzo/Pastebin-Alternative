@@ -248,7 +248,61 @@ header p {
     justify-content: flex-start;
     margin-bottom: 1.5rem;
 }
+/* Edit Form Styles */
+.edit-form {
+    margin-top: 2rem;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border: 1px solid #e1e4e8;
+}
 
+.edit-form textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 300px;
+    background-color: white;
+}
+
+.edit-form .form-actions {
+    margin-top: 1rem;
+}
+
+/* Edit Button Styles */
+#editBtn {
+    background-color: #f9826c;
+    color: white;
+}
+
+#editBtn:hover {
+    background-color: #e36209;
+}
+
+/* View Mode */
+.view-mode .edit-form {
+    display: none;
+}
+
+.view-mode #editBtn {
+    display: inline-flex;
+}
+
+.edit-mode .edit-form {
+    display: block;
+}
+
+.edit-mode #pasteDisplay {
+    display: none;
+}
+
+.edit-mode #editBtn {
+    display: none;
+}
 /* Paste Meta Info */
 .paste-meta {
     display: flex;
