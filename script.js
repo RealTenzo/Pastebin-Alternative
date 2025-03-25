@@ -17,15 +17,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const pasteTitle = document.getElementById('pasteTitle');
     const pasteDate = document.getElementById('pasteDate');
     const rawLink = document.getElementById('rawLink');
+    const editBtn = document.getElementById('editBtn');
+    const editForm = document.getElementById('editForm');
+    const updateForm = document.getElementById('updateForm');
+    const updatedContent = document.getElementById('updatedContent');
+    const updatedName = document.getElementById('updatedName');
+    const cancelEdit = document.getElementById('cancelEdit');
+
+    // Current state
+    let currentPasteId = null;
 
     // Check URL to see if we're viewing a paste
     const path = window.location.pathname;
     const isRaw = path.endsWith('.raw');
-    const pasteId = extractPasteId(path);
+    currentPasteId = extractPasteId(path);
 
-    if (pasteId) {
+    if (currentPasteId) {
         // We're viewing a paste
-        showPaste(pasteId, isRaw);
+        showPaste(currentPasteId, isRaw);
     } else if (path !== '/' && !path.endsWith('index.html')) {
         // Redirect to home if invalid path
         window.location.href = '/';
@@ -55,10 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
             content,
             name,
             timestamp: timestamp.toISOString(),
-            created: timestamp.getTime()
+            created: timestamp.getTime(),
+            history: [] // Store edit history
         };
         
         savePaste(paste);
+        currentPasteId = id;
         
         // Generate URLs
         const baseUrl = getBaseUrl();
@@ -102,6 +113,69 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '/';
     });
 
+    // Edit paste button
+    editBtn.addEventListener('click', function() {
+        const paste = getPaste(currentPasteId);
+        if (!paste) return;
+        
+        // Populate edit form
+        updatedContent.value = paste.content;
+        updatedName.value = paste.name;
+        
+        // Switch to edit mode
+        viewSection.classList.add('edit-mode');
+        editForm.classList.remove('hidden');
+    });
+
+    // Cancel edit
+    cancelEdit.addEventListener('click', function() {
+        viewSection.classList.remove('edit-mode');
+        editForm.classList.add('hidden');
+    });
+
+    // Save updated paste
+    updateForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newContent = updatedContent.value.trim();
+        if (!newContent) return;
+        
+        const newName = (updatedName.value || 'unnamed')
+            .replace(/\s+/g, '-')
+            .toLowerCase()
+            .replace(/[^a-z0-9-]/g, '');
+        
+        const paste = getPaste(currentPasteId);
+        if (!paste) return;
+        
+        // Add to history before updating
+        paste.history.push({
+            content: paste.content,
+            name: paste.name,
+            timestamp: paste.timestamp
+        });
+        
+        // Update paste
+        paste.content = newContent;
+        paste.name = newName;
+        paste.timestamp = new Date().toISOString();
+        
+        savePaste(paste);
+        
+        // Update display
+        pasteDisplay.textContent = newContent;
+        pasteTitle.textContent = newName;
+        applyBasicSyntaxHighlighting(pasteDisplay);
+        
+        // Switch back to view mode
+        viewSection.classList.remove('edit-mode');
+        editForm.classList.add('hidden');
+        
+        // Update raw URL
+        const baseUrl = getBaseUrl();
+        rawLink.href = `${baseUrl}${currentPasteId}.raw`;
+    });
+
     // View raw paste from view page
     if (rawLink) {
         rawLink.addEventListener('click', function(e) {
@@ -140,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isRaw) {
             // Raw content - just output plain text
             document.body.innerHTML = `<pre>${paste.content}</pre>`;
-            document.title = `${paste.name}.raw - SimplePaste`;
+            document.title = `${paste.name}.raw - EditablePaste`;
             document.body.classList.add('raw-view');
             return;
         }
@@ -149,6 +223,8 @@ document.addEventListener('DOMContentLoaded', function() {
         createSection.classList.add('hidden');
         resultSection.classList.add('hidden');
         viewSection.classList.remove('hidden');
+        viewSection.classList.remove('edit-mode');
+        editForm.classList.add('hidden');
         
         // Display paste info
         pasteTitle.textContent = paste.name;
@@ -159,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pasteDisplay.textContent = paste.content;
         applyBasicSyntaxHighlighting(pasteDisplay);
         
-        document.title = `${paste.name} - SimplePaste`;
+        document.title = `${paste.name} - EditablePaste`;
     }
 
     function copyToClipboard(inputElement) {
