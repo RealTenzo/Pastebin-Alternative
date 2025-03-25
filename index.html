@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimplePaste - Share Text Easily</title>
+    <title>SimplePaste - GitHub-like Pastebin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,12 +11,13 @@
     <header>
         <div class="container">
             <h1><i class="fas fa-paste"></i> SimplePaste</h1>
-            <p>A minimal pastebin-like text sharing service</p>
+            <p>A GitHub-like pastebin with raw text access</p>
         </div>
     </header>
 
     <main class="container">
-        <section class="paste-creation">
+        <!-- Create Paste Section -->
+        <section class="paste-creation" id="createSection">
             <form id="pasteForm">
                 <div class="form-group">
                     <label for="pasteContent">Paste your text below:</label>
@@ -37,6 +38,7 @@
             </form>
         </section>
 
+        <!-- Result Section -->
         <section class="paste-result hidden" id="resultSection">
             <h2><i class="fas fa-link"></i> Your Paste is Ready!</h2>
             <div class="result-box">
@@ -46,12 +48,18 @@
                         <i class="fas fa-copy"></i> Copy
                     </button>
                 </div>
+                <div class="url-display" style="margin-top: 10px;">
+                    <input type="text" id="rawUrl" readonly>
+                    <button id="copyRawBtn" class="btn btn-copy">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
                 <div class="expiry-info">
-                    <p>This paste will be available for <strong>30 days</strong>.</p>
+                    <p>This paste will be stored permanently in your browser.</p>
                 </div>
                 <div class="actions">
-                    <a href="#" id="viewRaw" class="btn btn-raw" target="_blank">
-                        <i class="fas fa-code"></i> View Raw
+                    <a href="#" id="viewPaste" class="btn">
+                        <i class="fas fa-eye"></i> View Paste
                     </a>
                     <a href="#" id="newPaste" class="btn btn-new">
                         <i class="fas fa-plus"></i> New Paste
@@ -59,12 +67,29 @@
                 </div>
             </div>
         </section>
+
+        <!-- View Paste Section -->
+        <section class="paste-view hidden" id="viewSection">
+            <div class="actions">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New Paste
+                </a>
+                <a href="#" id="rawLink" class="btn btn-raw">
+                    <i class="fas fa-code"></i> View Raw
+                </a>
+            </div>
+            <div class="paste-meta">
+                <span id="pasteTitle"></span>
+                <span id="pasteDate"></span>
+            </div>
+            <pre id="pasteDisplay"></pre>
+        </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>SimplePaste - A minimal text sharing service</p>
-            <p class="credits">Created with HTML, CSS, and JavaScript</p>
+            <p>SimplePaste - A GitHub-like pastebin</p>
+            <p class="credits">Pastes are stored in your browser permanently</p>
         </div>
     </footer>
 
