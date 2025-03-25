@@ -21,11 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check URL to see if we're viewing a paste
     const path = window.location.pathname;
     const isRaw = path.endsWith('.raw');
-    const pasteId = path.split('/').pop().replace('.raw', '');
+    const pasteId = extractPasteId(path);
 
-    if (pasteId && pasteId !== 'index.html') {
+    if (pasteId) {
         // We're viewing a paste
         showPaste(pasteId, isRaw);
+    } else if (path !== '/' && !path.endsWith('index.html')) {
+        // Redirect to home if invalid path
+        window.location.href = '/';
     } else {
         // We're on the main page
         createSection.classList.remove('hidden');
@@ -35,8 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
     pasteForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const content = pasteContent.value;
-        const name = (pasteName.value || 'unnamed').replace(/\s+/g, '-').toLowerCase();
+        const content = pasteContent.value.trim();
+        if (!content) return;
+        
+        const name = (pasteName.value || 'unnamed')
+            .replace(/\s+/g, '-')
+            .toLowerCase()
+            .replace(/[^a-z0-9-]/g, '');
+        
         const id = generateId();
         const timestamp = new Date();
         
@@ -52,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         savePaste(paste);
         
         // Generate URLs
-        const baseUrl = window.location.href.replace('index.html', '');
+        const baseUrl = getBaseUrl();
         const viewUrl = `${baseUrl}${id}`;
         const rawUrl = `${baseUrl}${id}.raw`;
         
@@ -90,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create a new paste
     newPaste.addEventListener('click', function(e) {
         e.preventDefault();
-        window.location.href = 'index.html';
+        window.location.href = '/';
     });
 
     // View raw paste from view page
@@ -123,8 +132,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const paste = getPaste(id);
         
         if (!paste) {
-            // Paste not found, redirect to create page
-            window.location.href = 'index.html';
+            // Paste not found, redirect to home
+            window.location.href = '/';
             return;
         }
         
@@ -132,22 +141,25 @@ document.addEventListener('DOMContentLoaded', function() {
             // Raw content - just output plain text
             document.body.innerHTML = `<pre>${paste.content}</pre>`;
             document.title = `${paste.name}.raw - SimplePaste`;
-        } else {
-            // Formatted view
-            createSection.classList.add('hidden');
-            viewSection.classList.remove('hidden');
-            
-            // Display paste info
-            pasteTitle.textContent = paste.name;
-            const date = new Date(paste.timestamp);
-            pasteDate.textContent = date.toLocaleString();
-            
-            // Display content with basic syntax highlighting
-            pasteDisplay.textContent = paste.content;
-            applyBasicSyntaxHighlighting(pasteDisplay);
-            
-            document.title = `${paste.name} - SimplePaste`;
+            document.body.classList.add('raw-view');
+            return;
         }
+        
+        // Formatted view
+        createSection.classList.add('hidden');
+        resultSection.classList.add('hidden');
+        viewSection.classList.remove('hidden');
+        
+        // Display paste info
+        pasteTitle.textContent = paste.name;
+        const date = new Date(paste.timestamp);
+        pasteDate.textContent = date.toLocaleString();
+        
+        // Display content with basic syntax highlighting
+        pasteDisplay.textContent = paste.content;
+        applyBasicSyntaxHighlighting(pasteDisplay);
+        
+        document.title = `${paste.name} - SimplePaste`;
     }
 
     function copyToClipboard(inputElement) {
@@ -171,11 +183,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Very basic syntax highlighting
         const html = text
-            .replace(/(\b(function|return|if|else|for|while|var|let|const|class)\b)/g, '<span class="keyword">$1</span>')
+            .replace(/(\b(function|return|if|else|for|while|var|let|const|class|import|export|from)\b)/g, '<span class="keyword">$1</span>')
             .replace(/(".*?"|'.*?')/g, '<span class="string">$1</span>')
             .replace(/(\/\/.*|\/\*[\s\S]*?\*\/)/g, '<span class="comment">$1</span>')
-            .replace(/(\b\d+\b)/g, '<span class="number">$1</span>');
+            .replace(/(\b\d+\b)/g, '<span class="number">$1</span>')
+            .replace(/(\b[A-Z][a-zA-Z0-9_]*\b)/g, '<span class="class-name">$1</span>');
         
         element.innerHTML = html;
+    }
+
+    function extractPasteId(path) {
+        // Handle both /id and /id.raw
+        const match = path.match(/\/([a-z0-9]+)(?:\.raw)?$/i);
+        return match ? match[1] : null;
+    }
+
+    function getBaseUrl() {
+        let baseUrl = window.location.href;
+        
+        // Remove hash and query parameters
+        baseUrl = baseUrl.split('#')[0].split('?')[0];
+        
+        // Ensure it ends with /
+        if (!baseUrl.endsWith('/')) {
+            const lastSlash = baseUrl.lastIndexOf('/');
+            baseUrl = baseUrl.substring(0, lastSlash + 1);
+        }
+        
+        return baseUrl;
     }
 });
