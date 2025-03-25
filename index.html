@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SharePaste - Editable Pastebin</title>
+    <title>FreePaste - Server-Sided Pastebin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-paste"></i> SharePaste</h1>
-            <p>Create and share pastes with editable raw links</p>
+            <h1><i class="fas fa-paste"></i> FreePaste</h1>
+            <p>Free server-sided pastebin with JSONBin.io</p>
         </div>
     </header>
 
@@ -30,9 +30,6 @@
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Create Paste
-                    </button>
-                    <button type="button" id="clearBtn" class="btn btn-secondary">
-                        <i class="fas fa-trash"></i> Clear
                     </button>
                 </div>
             </form>
@@ -58,7 +55,7 @@
                     <a href="#" id="viewPaste" class="btn">
                         <i class="fas fa-eye"></i> View Paste
                     </a>
-                    <a href="#" id="newPaste" class="btn btn-new">
+                    <a href="index.html" class="btn btn-new">
                         <i class="fas fa-plus"></i> New Paste
                     </a>
                 </div>
@@ -69,7 +66,7 @@
         <section class="paste-view hidden" id="viewSection">
             <div class="actions">
                 <a href="index.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Create New Paste
+                    <i class="fas fa-plus"></i> New Paste
                 </a>
                 <button id="editBtn" class="btn">
                     <i class="fas fa-edit"></i> Edit
@@ -91,10 +88,6 @@
                         <label for="updatedContent">Edit your paste:</label>
                         <textarea id="updatedContent" rows="15"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="updatedName">Update name (optional):</label>
-                        <input type="text" id="updatedName" placeholder="new-name">
-                    </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i> Save Changes
@@ -110,7 +103,7 @@
 
     <footer>
         <div class="container">
-            <p>SharePaste - Editable pastebin with shareable raw links</p>
+            <p>FreePaste - Powered by JSONBin.io</p>
         </div>
     </footer>
 
