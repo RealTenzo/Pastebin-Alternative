@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SimplePaste - GitHub-like Pastebin</title>
+    <title>EditablePaste - GitHub-like Pastebin</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-paste"></i> SimplePaste</h1>
-            <p>A GitHub-like pastebin with raw text access</p>
+            <h1><i class="fas fa-paste"></i> EditablePaste</h1>
+            <p>A GitHub-like pastebin with editing functionality</p>
         </div>
     </header>
 
@@ -68,12 +68,15 @@
             </div>
         </section>
 
-        <!-- View Paste Section -->
+        <!-- View/Edit Paste Section -->
         <section class="paste-view hidden" id="viewSection">
             <div class="actions">
                 <a href="index.html" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Create New Paste
                 </a>
+                <button id="editBtn" class="btn">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
                 <a href="#" id="rawLink" class="btn btn-raw">
                     <i class="fas fa-code"></i> View Raw
                 </a>
@@ -83,13 +86,35 @@
                 <span id="pasteDate"></span>
             </div>
             <pre id="pasteDisplay"></pre>
+            
+            <!-- Edit Form (hidden by default) -->
+            <div class="edit-form hidden" id="editForm">
+                <form id="updateForm">
+                    <div class="form-group">
+                        <label for="updatedContent">Edit your paste:</label>
+                        <textarea id="updatedContent" rows="15"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="updatedName">Update name (optional):</label>
+                        <input type="text" id="updatedName" placeholder="new-name">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" id="cancelEdit" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>SimplePaste - A GitHub-like pastebin</p>
-            <p class="credits">Pastes are stored in your browser permanently</p>
+            <p>EditablePaste - A GitHub-like pastebin</p>
+            <p class="credits">Pastes are stored in your browser and can be edited</p>
         </div>
     </footer>
 
