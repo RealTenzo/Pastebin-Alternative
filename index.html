@@ -395,43 +395,41 @@
 
         // Handle paste creation
         pasteForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const content = pasteContent.value.trim();
-            const name = pasteName.value.trim();
-            const expiry = pasteExpiry.value;
-            
-            if (!content) {
-                alert('Please enter some content for your paste');
-                return;
-            }
-            
-            try {
-                const pasteId = await createPaste(content, name, expiry);
-                currentPasteId = pasteId;
-                
-                // Show the URLs
-                const pasteUrlValue = `${window.location.origin}${window.location.pathname}?id=${currentPasteId}`;
-                const rawUrlValue = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/pastes/${currentPasteId}`;
-                
-                pasteUrl.value = pasteUrlValue;
-                rawUrl.value = rawUrlValue;
-                
-                // Set up the view paste link
-                viewPaste.href = pasteUrlValue;
-                
-                // Switch to result view
-                createSection.classList.add('hidden');
-                resultSection.classList.remove('hidden');
-                
-                // Log analytics event
-                analytics.logEvent('paste_created');
-            } catch (error) {
-                console.error('Error creating paste:', error);
-                alert('Failed to create paste. Please try again.');
-            }
-        });
-
+    e.preventDefault();
+    
+    const content = pasteContent.value.trim();
+    const name = pasteName.value.trim();
+    const expiry = pasteExpiry.value;
+    
+    if (!content) {
+        alert('Please enter some content for your paste');
+        return;
+    }
+    
+    try {
+        const pasteId = await createPaste(content, name, expiry);
+        currentPasteId = pasteId;
+        
+        // Show the URLs
+        const pasteUrlValue = `${window.location.origin}${window.location.pathname}?id=${currentPasteId}`;
+        const rawUrlValue = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/pastes/${currentPasteId}`;
+        
+        pasteUrl.value = pasteUrlValue;
+        rawUrl.value = rawUrlValue;
+        
+        // Set up the view paste link
+        viewPaste.href = pasteUrlValue;
+        
+        // Switch to result view
+        createSection.classList.add('hidden');
+        resultSection.classList.remove('hidden');
+        
+        analytics.logEvent('paste_created');
+    } catch (error) {
+        console.error('Error creating paste:', error);
+        alert(`Failed to create paste: ${error.message}`);
+    }
+});
         // Copy buttons
         copyBtn.addEventListener('click', () => {
             pasteUrl.select();
