@@ -3,43 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreePaste - Firebase Pastebin</title>
+    <title>Tenzo Paste - Secure Code Sharing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #00ff00;
+            --secondary: #006600;
+            --dark: #000000;
+            --light: #111111;
+            --text: #00ff00;
+            --text-secondary: #009900;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', monospace;
         }
 
         body {
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: var(--dark);
+            color: var(--text);
             line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 80, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 80, 0, 0.1) 0%, transparent 20%);
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            border: 1px solid var(--secondary);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            background-color: rgba(0, 10, 0, 0.8);
         }
 
         header {
-            background-color: #2c3e50;
-            color: white;
+            background-color: var(--dark);
+            color: var(--primary);
             padding: 20px 0;
             margin-bottom: 30px;
+            border-bottom: 1px solid var(--secondary);
         }
 
         header h1 {
             font-size: 2.2rem;
             margin-bottom: 5px;
+            text-shadow: 0 0 5px var(--primary);
         }
 
         header p {
             opacity: 0.8;
             font-size: 1rem;
+            color: var(--text-secondary);
         }
 
         .form-group {
@@ -50,69 +68,85 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: var(--primary);
         }
 
         textarea, input[type="text"], select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid var(--secondary);
+            border-radius: 0;
             font-size: 16px;
             resize: vertical;
+            background-color: var(--light);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
         }
 
         textarea {
             min-height: 300px;
-            font-family: 'Courier New', Courier, monospace;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            outline: 1px solid var(--primary);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         .btn {
             display: inline-block;
             padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
+            background-color: var(--light);
+            color: var(--primary);
+            border: 1px solid var(--secondary);
+            border-radius: 0;
             cursor: pointer;
             text-decoration: none;
             font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
         }
 
         .btn:hover {
-            background-color: #2980b9;
+            background-color: var(--secondary);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
 
         .btn-primary {
-            background-color: #2c3e50;
+            background-color: var(--dark);
+            border-color: var(--primary);
         }
 
         .btn-primary:hover {
-            background-color: #1a252f;
+            background-color: rgba(0, 255, 0, 0.1);
         }
 
         .btn-secondary {
-            background-color: #95a5a6;
+            background-color: var(--dark);
+            color: var(--text-secondary);
         }
 
         .btn-secondary:hover {
-            background-color: #7f8c8d;
+            background-color: rgba(0, 80, 0, 0.3);
         }
 
         .btn-copy {
-            background-color: #27ae60;
+            background-color: var(--secondary);
+            color: var(--text);
         }
 
         .btn-copy:hover {
-            background-color: #219653;
+            background-color: var(--primary);
+            color: var(--dark);
         }
 
         .btn-raw {
-            background-color: #9b59b6;
+            background-color: var(--dark);
+            color: var(--primary);
+            border-color: var(--primary);
         }
 
         .btn-raw:hover {
-            background-color: #8e44ad;
+            background-color: rgba(0, 255, 0, 0.1);
         }
 
         .form-actions {
@@ -124,14 +158,16 @@
         }
 
         .paste-result {
-            background-color: white;
+            background-color: var(--light);
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid var(--secondary);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
         }
 
         .paste-result h2 {
             margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 0 0 5px var(--primary);
         }
 
         .url-display {
@@ -142,13 +178,15 @@
         .url-display input {
             flex-grow: 1;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
+            border: 1px solid var(--secondary);
+            border-radius: 0;
             font-size: 14px;
+            background-color: var(--light);
+            color: var(--text);
         }
 
         .url-display button {
-            border-radius: 0 4px 4px 0;
+            border-radius: 0;
             min-width: 80px;
         }
 
@@ -159,39 +197,69 @@
         }
 
         .paste-view {
-            background-color: white;
+            background-color: var(--light);
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid var(--secondary);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
         }
 
         .paste-meta {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--secondary);
             font-size: 14px;
-            color: #7f8c8d;
+            color: var(--text-secondary);
+            gap: 10px;
         }
 
         #pasteDisplay {
             white-space: pre-wrap;
-            background-color: #f8f9fa;
+            background-color: var(--dark);
             padding: 15px;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid var(--secondary);
+            font-family: 'Courier New', monospace;
             overflow-x: auto;
+            color: var(--text);
         }
 
         footer {
             margin-top: 50px;
             padding: 20px 0;
             text-align: center;
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-size: 14px;
+            border-top: 1px solid var(--secondary);
         }
 
+        /* Terminal-like blinking cursor effect */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Glitch effect */
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #00ff00, -0.05em -0.025em 0 #ff0000; }
+            14% { text-shadow: 0.05em 0 0 #00ff00, -0.05em -0.025em 0 #ff0000; }
+            15% { text-shadow: -0.05em -0.025em 0 #00ff00, 0.025em 0.025em 0 #ff0000; }
+            49% { text-shadow: -0.05em -0.025em 0 #00ff00, 0.025em 0.025em 0 #ff0000; }
+            50% { text-shadow: 0.025em 0.05em 0 #00ff00, 0.05em 0 0 #ff0000; }
+            99% { text-shadow: 0.025em 0.05em 0 #00ff00, 0.05em 0 0 #ff0000; }
+            100% { text-shadow: -0.025em 0 0 #00ff00, -0.025em -0.025em 0 #ff0000; }
+        }
+
+        .glitch {
+            animation: glitch 2s infinite;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -211,11 +279,11 @@
             }
             
             .url-display input {
-                border-radius: 4px 4px 0 0;
+                border-radius: 0;
             }
             
             .url-display button {
-                border-radius: 0 0 4px 4px;
+                border-radius: 0;
             }
         }
 
@@ -223,21 +291,23 @@
         body.raw-view {
             margin: 0;
             padding: 0;
-            background: white;
+            background: var(--dark);
+            color: var(--text);
         }
         
         body.raw-view pre {
             white-space: pre-wrap;
             margin: 0;
             padding: 20px;
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-paste"></i> FreePaste</h1>
-            <p>Free server-sided pastebin powered by Firebase</p>
+            <h1><i class="fas fa-terminal"></i> <span class="glitch">Tenzo Paste</span></h1>
+            <p>Secure code sharing for hackers by hackers</p>
         </div>
     </header>
 
@@ -246,15 +316,15 @@
         <section class="paste-creation" id="createSection">
             <form id="pasteForm">
                 <div class="form-group">
-                    <label for="pasteContent">Paste your text below:</label>
-                    <textarea id="pasteContent" name="pasteContent" rows="15" required placeholder="Type or paste your content here..."></textarea>
+                    <label for="pasteContent">$ <span class="cursor">_</span></label>
+                    <textarea id="pasteContent" name="pasteContent" rows="15" required placeholder="// Enter your code here..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="pasteName">Paste name (optional):</label>
-                    <input type="text" id="pasteName" name="pasteName" placeholder="my-paste">
+                    <label for="pasteName">Filename (optional):</label>
+                    <input type="text" id="pasteName" name="pasteName" placeholder="hack.js">
                 </div>
                 <div class="form-group">
-                    <label for="pasteExpiry">Expires after (optional):</label>
+                    <label for="pasteExpiry">Self-destruct timer:</label>
                     <select id="pasteExpiry" name="pasteExpiry">
                         <option value="">Never</option>
                         <option value="1h">1 Hour</option>
@@ -265,7 +335,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Create Paste
+                        <i class="fas fa-shield-alt"></i> Encrypt & Store
                     </button>
                 </div>
             </form>
@@ -273,7 +343,7 @@
 
         <!-- Result Section -->
         <section class="paste-result hidden" id="resultSection">
-            <h2><i class="fas fa-link"></i> Your Paste is Ready!</h2>
+            <h2><i class="fas fa-lock-open"></i> Paste Secured!</h2>
             <div class="result-box">
                 <div class="url-display">
                     <input type="text" id="pasteUrl" readonly>
@@ -289,10 +359,10 @@
                 </div>
                 <div class="actions">
                     <a href="#" id="viewPaste" class="btn">
-                        <i class="fas fa-eye"></i> View Paste
+                        <i class="fas fa-eye"></i> View
                     </a>
                     <a href="index.html" class="btn btn-new">
-                        <i class="fas fa-plus"></i> New Paste
+                        <i class="fas fa-plus"></i> New
                     </a>
                 </div>
             </div>
@@ -302,13 +372,13 @@
         <section class="paste-view hidden" id="viewSection">
             <div class="actions">
                 <a href="index.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> New Paste
+                    <i class="fas fa-plus"></i> New
                 </a>
                 <button id="editBtn" class="btn">
-                    <i class="fas fa-edit"></i> Edit
+                    <i class="fas fa-code"></i> Edit
                 </button>
                 <a href="#" id="rawLink" class="btn btn-raw" target="_blank">
-                    <i class="fas fa-code"></i> View Raw
+                    <i class="fas fa-file-code"></i> Raw
                 </a>
             </div>
             <div class="paste-meta">
@@ -323,15 +393,15 @@
             <div class="edit-form hidden" id="editForm">
                 <form id="updateForm">
                     <div class="form-group">
-                        <label for="updatedContent">Edit your paste:</label>
+                        <label for="updatedContent">$ <span class="cursor">_</span></label>
                         <textarea id="updatedContent" rows="15"></textarea>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Save Changes
+                            <i class="fas fa-save"></i> Commit Changes
                         </button>
                         <button type="button" id="cancelEdit" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Cancel
+                            <i class="fas fa-times"></i> Abort
                         </button>
                     </div>
                 </form>
@@ -341,14 +411,13 @@
 
     <footer>
         <div class="container">
-            <p>FreePaste - Powered by Firebase</p>
+            <p><i class="fas fa-user-secret"></i> Tenzo Paste - No logs, no tracking</p>
         </div>
     </footer>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics-compat.js"></script>
 
     <script>
         // Firebase configuration
@@ -365,8 +434,12 @@
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        const analytics = firebase.analytics();
         const db = firebase.firestore();
+
+        // Set Firestore settings (important for permissions)
+        db.settings({
+            experimentalForceLongPolling: true
+        });
 
         // DOM Elements
         const createSection = document.getElementById('createSection');
@@ -420,7 +493,7 @@
             const expiry = pasteExpiry.value;
             
             if (!content) {
-                alert('Please enter some content for your paste');
+                alert('[ERROR] No content provided');
                 return;
             }
             
@@ -441,12 +514,9 @@
                 // Switch to result view
                 createSection.classList.add('hidden');
                 resultSection.classList.remove('hidden');
-                
-                // Log analytics event
-                analytics.logEvent('paste_created');
             } catch (error) {
                 console.error('Error creating paste:', error);
-                alert(`Failed to create paste: ${error.message}`);
+                alert(`[SYSTEM FAILURE] ${error.message}`);
             }
         });
 
@@ -454,13 +524,13 @@
         copyBtn.addEventListener('click', () => {
             pasteUrl.select();
             document.execCommand('copy');
-            showCopiedFeedback(copyBtn);
+            showCopiedFeedback(copyBtn, 'URL copied to clipboard');
         });
 
         copyRawBtn.addEventListener('click', () => {
             rawUrl.select();
             document.execCommand('copy');
-            showCopiedFeedback(copyRawBtn);
+            showCopiedFeedback(copyRawBtn, 'Raw URL copied');
         });
 
         // Edit buttons
@@ -482,7 +552,7 @@
             const newContent = updatedContent.value.trim();
             
             if (!newContent) {
-                alert('Paste content cannot be empty');
+                alert('[ERROR] Empty content not allowed');
                 return;
             }
             
@@ -491,10 +561,10 @@
                 pasteDisplay.textContent = newContent;
                 editForm.classList.add('hidden');
                 pasteDisplay.classList.remove('hidden');
-                alert('Paste updated successfully!');
+                showCopiedFeedback(editBtn, 'Changes committed successfully');
             } catch (error) {
                 console.error('Error updating paste:', error);
-                alert('Failed to update paste. Please try again.');
+                alert('[SYSTEM FAILURE] Update failed');
             }
         });
 
@@ -505,9 +575,9 @@
         });
 
         // Helper functions
-        function showCopiedFeedback(button) {
+        function showCopiedFeedback(button, message) {
             const originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            button.innerHTML = `<i class="fas fa-check"></i> ${message}`;
             setTimeout(() => {
                 button.innerHTML = originalText;
             }, 2000);
@@ -541,18 +611,24 @@
             document.body.className = 'raw-view';
             document.body.innerHTML = '<pre>Loading...</pre>';
             
+            // Add Content-Type header for raw text
+            const meta = document.createElement('meta');
+            meta.httpEquiv = "Content-Type";
+            meta.content = "text/plain; charset=utf-8";
+            document.head.appendChild(meta);
+            
             db.collection('pastes').doc(pasteId).get()
                 .then(doc => {
                     if (doc.exists) {
                         const data = doc.data();
                         document.querySelector('pre').textContent = data.content;
                     } else {
-                        document.querySelector('pre').textContent = 'Paste not found';
+                        document.querySelector('pre').textContent = '404 - Paste not found';
                     }
                 })
                 .catch(error => {
                     console.error("Error loading raw paste:", error);
-                    document.querySelector('pre').textContent = 'Error loading paste';
+                    document.querySelector('pre').textContent = '500 - System error';
                 });
         }
 
@@ -562,7 +638,7 @@
                 const expiryDate = calculateExpiryDate(expiryOption);
                 const pasteData = {
                     content: content,
-                    name: name || 'Untitled Paste',
+                    name: name || 'untitled',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                     views: 0,
@@ -599,12 +675,12 @@
                 // Check if paste is expired
                 if (data.expiryDate && new Date() > data.expiryDate.toDate()) {
                     await db.collection('pastes').doc(pasteId).delete();
-                    throw new Error('This paste has expired');
+                    throw new Error('Paste expired and deleted');
                 }
                 
                 // Display the paste
-                pasteTitle.textContent = data.name || 'Untitled Paste';
-                pasteDate.textContent = `Created: ${data.createdAt?.toDate().toLocaleString() || 'Unknown date'}`;
+                pasteTitle.textContent = data.name || 'untitled';
+                pasteDate.textContent = `Created: ${data.createdAt?.toDate().toLocaleString() || 'unknown'}`;
                 pasteViews.textContent = `Views: ${data.views || 0}`;
                 pasteExpiryInfo.textContent = `Expires: ${formatDate(data.expiryDate?.toDate())}`;
                 pasteDisplay.textContent = data.content;
@@ -621,11 +697,9 @@
                 createSection.classList.add('hidden');
                 resultSection.classList.add('hidden');
                 viewSection.classList.remove('hidden');
-                
-                analytics.logEvent('paste_viewed');
             } catch (error) {
                 console.error('Error loading paste:', error);
-                alert(error.message || 'Failed to load paste. It may have been deleted or the ID is invalid.');
+                alert(`[SYSTEM ERROR] ${error.message}`);
                 window.location.href = 'index.html';
             }
         }
@@ -635,8 +709,6 @@
                 content: newContent,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            
-            analytics.logEvent('paste_updated');
         }
     </script>
 </body>
