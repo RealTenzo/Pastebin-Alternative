@@ -52,7 +52,7 @@
             font-weight: 600;
         }
 
-        textarea, input[type="text"] {
+        textarea, input[type="text"], select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -218,6 +218,19 @@
                 border-radius: 0 0 4px 4px;
             }
         }
+
+        /* Raw view styles */
+        body.raw-view {
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+        
+        body.raw-view pre {
+            white-space: pre-wrap;
+            margin: 0;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -294,7 +307,7 @@
                 <button id="editBtn" class="btn">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-                <a href="#" id="rawLink" class="btn btn-raw">
+                <a href="#" id="rawLink" class="btn btn-raw" target="_blank">
                     <i class="fas fa-code"></i> View Raw
                 </a>
             </div>
@@ -387,49 +400,56 @@
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const pasteId = urlParams.get('id');
+            const rawView = urlParams.get('raw') === 'true';
             
             if (pasteId) {
-                loadPaste(pasteId);
+                if (rawView) {
+                    showRawPaste(pasteId);
+                } else {
+                    loadPaste(pasteId);
+                }
             }
         });
 
         // Handle paste creation
         pasteForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const content = pasteContent.value.trim();
-    const name = pasteName.value.trim();
-    const expiry = pasteExpiry.value;
-    
-    if (!content) {
-        alert('Please enter some content for your paste');
-        return;
-    }
-    
-    try {
-        const pasteId = await createPaste(content, name, expiry);
-        currentPasteId = pasteId;
-        
-        // Show the URLs
-        const pasteUrlValue = `${window.location.origin}${window.location.pathname}?id=${currentPasteId}`;
-        const rawUrlValue = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/pastes/${currentPasteId}`;
-        
-        pasteUrl.value = pasteUrlValue;
-        rawUrl.value = rawUrlValue;
-        
-        // Set up the view paste link
-        viewPaste.href = pasteUrlValue;
-        
-        // Switch to result view
-        createSection.classList.add('hidden');
-        resultSection.classList.remove('hidden');
-        
-        analytics.logEvent('paste_created');
-    } catch (error) {
-        console.error('Error creating paste:', error);
-        alert(`Failed to create paste: ${error.message}`);
-    }
-});
+            e.preventDefault();
+            
+            const content = pasteContent.value.trim();
+            const name = pasteName.value.trim();
+            const expiry = pasteExpiry.value;
+            
+            if (!content) {
+                alert('Please enter some content for your paste');
+                return;
+            }
+            
+            try {
+                const pasteId = await createPaste(content, name, expiry);
+                currentPasteId = pasteId;
+                
+                // Show the URLs
+                const pasteUrlValue = `${window.location.origin}${window.location.pathname}?id=${currentPasteId}`;
+                const rawUrlValue = `${pasteUrlValue}&raw=true`;
+                
+                pasteUrl.value = pasteUrlValue;
+                rawUrl.value = rawUrlValue;
+                
+                // Set up the view paste link
+                viewPaste.href = pasteUrlValue;
+                
+                // Switch to result view
+                createSection.classList.add('hidden');
+                resultSection.classList.remove('hidden');
+                
+                // Log analytics event
+                analytics.logEvent('paste_created');
+            } catch (error) {
+                console.error('Error creating paste:', error);
+                alert(`Failed to create paste: ${error.message}`);
+            }
+        });
+
         // Copy buttons
         copyBtn.addEventListener('click', () => {
             pasteUrl.select();
@@ -481,7 +501,7 @@
         // Raw link
         rawLink.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open(`${API_BASE_URL}/${currentPasteId}`, '_blank');
+            window.open(`${window.location.origin}${window.location.pathname}?id=${currentPasteId}&raw=true`, '_blank');
         });
 
         // Helper functions
@@ -516,18 +536,53 @@
             return date.toLocaleString();
         }
 
+        // Show raw paste content (GitHub-style)
+        function showRawPaste(pasteId) {
+            document.body.className = 'raw-view';
+            document.body.innerHTML = '<pre>Loading...</pre>';
+            
+            db.collection('pastes').doc(pasteId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.querySelector('pre').textContent = data.content;
+                    } else {
+                        document.querySelector('pre').textContent = 'Paste not found';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading raw paste:", error);
+                    document.querySelector('pre').textContent = 'Error loading paste';
+                });
+        }
+
         // Firebase Functions
         async function createPaste(content, name = '', expiryOption = '') {
-            const expiryDate = calculateExpiryDate(expiryOption);
-            const docRef = await db.collection('pastes').add({
-                content: content,
-                name: name || 'Untitled Paste',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                views: 0,
-                expiryDate: expiryDate
-            });
-            return docRef.id;
+            try {
+                const expiryDate = calculateExpiryDate(expiryOption);
+                const pasteData = {
+                    content: content,
+                    name: name || 'Untitled Paste',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    views: 0,
+                    expiryDate: expiryDate
+                };
+
+                // Add validation
+                if (content.length > 100000) {
+                    throw new Error('Content too large (max 100KB)');
+                }
+                if (name.length > 100) {
+                    throw new Error('Name too long (max 100 chars)');
+                }
+
+                const docRef = await db.collection('pastes').add(pasteData);
+                return docRef.id;
+            } catch (error) {
+                console.error('Firestore error:', error);
+                throw error;
+            }
         }
 
         async function loadPaste(pasteId) {
@@ -555,7 +610,7 @@
                 pasteDisplay.textContent = data.content;
                 
                 // Set up the raw link
-                rawLink.href = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/pastes/${pasteId}`;
+                rawLink.href = `${window.location.origin}${window.location.pathname}?id=${pasteId}&raw=true`;
                 
                 // Update view count
                 await db.collection('pastes').doc(pasteId).update({
@@ -567,7 +622,6 @@
                 resultSection.classList.add('hidden');
                 viewSection.classList.remove('hidden');
                 
-                // Log analytics event
                 analytics.logEvent('paste_viewed');
             } catch (error) {
                 console.error('Error loading paste:', error);
@@ -582,7 +636,6 @@
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             
-            // Log analytics event
             analytics.logEvent('paste_updated');
         }
     </script>
