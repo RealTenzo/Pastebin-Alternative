@@ -1,4 +1,13 @@
----
+
+### 3. **Validate Markdown Formatting**
+Ensure that the Markdown structure is correct overall. For example, ensure headings are correctly formatted (using `#`), lists are properly indented with hyphens (`-`), and code blocks are wrapped with triple backticks (```).
+
+### 4. **GitHub Render Issue**
+Sometimes, rendering issues can occur if there is a mistake elsewhere in the file, but GitHub's Markdown renderer is unable to interpret it. Check the file for any misplaced characters, like unescaped backticks, or stray `-`, `:`, or `#` symbols outside their proper contexts.
+
+### Example of Correctly Formatted `README.md`:
+
+```markdown
 # Pastebin Alternative by Tenzo
 
 ## Overview
@@ -61,4 +70,3 @@ Contributions are welcome! If you have any suggestions for features, improvement
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
----
