@@ -42,7 +42,7 @@ To set up the project locally, follow these steps:
 ## Technologies Used
 
 - **Frontend**: HTML, CSS, JavaScript
-- **No Backend**: This project is a frontend-only solution, storing pastes temporarily in the browser's local storage.
+- **Backend**: Stores Data in the Google firebase database.
 - **Hosting**: The project is hosted on Netlify for quick and easy access.
 
 ## Contributing
